@@ -19,10 +19,10 @@ const { MongoClient } = mongodb;
 
 const dbName                 = 'CSFLE';
 const dataCollectionName     = 'people';
-const keyVaultdbName         = 'encryption';
-const keyVaultCollectionName = '__keyVault';
+const keyVaultDB             = 'encryption';
+const keyVaultCollection     = '__keyVault';
 const dataNamespace          = `${dbName}.${dataCollectionName}`;
-const keyVaultNamespace      = `${keyVaultdbName}.${keyVaultCollectionName}`;
+const keyVaultNamespace      = `${keyVaultDB}.${keyVaultCollection}`;
 
 const PRETTY_PRINT = 2;
 
@@ -61,40 +61,40 @@ const AEAD_RANDOM = 'AEAD_AES_256_CBC_HMAC_SHA_512-Random';
   var keyName1 =  `ssn.${dataCollectionName}.${dbName}`
   var key1 =
   await client
-    .db(keyVaultdbName)
-    .collection(keyVaultCollectionName)
+    .db(keyVaultDB)
+    .collection(keyVaultCollection)
     .findOne({ 'keyAltNames': keyName1 })
     .catch((err) => { console.error(err.stack) });
 
   var keyName2 =  `dob.${dataCollectionName}.${dbName}`
   var key2 =
   await client
-    .db(keyVaultdbName)
-    .collection(keyVaultCollectionName)
+    .db(keyVaultDB)
+    .collection(keyVaultCollection)
     .findOne({ 'keyAltNames': keyName2 })
     .catch((err) => { console.error(err.stack) });
   
   var keyName3 =  `object_data.${dataCollectionName}.${dbName}`
   var key3 =
   await client
-    .db(keyVaultdbName)
-    .collection(keyVaultCollectionName)
+    .db(keyVaultDB)
+    .collection(keyVaultCollection)
     .findOne({ 'keyAltNames': keyName3 })
     .catch((err) => { console.error(err.stack) });
 
   var keyName4 =  `array_data.${dataCollectionName}.${dbName}`
   var key4 =
   await client
-    .db(keyVaultdbName)
-    .collection(keyVaultCollectionName)
+    .db(keyVaultDB)
+    .collection(keyVaultCollection)
     .findOne({ 'keyAltNames': keyName4 })
     .catch((err) => { console.error(err.stack) });
     
   var keyName5 =  `mobile.${dataCollectionName}.${dbName}`
   var key5 =
   await client
-      .db(keyVaultdbName)
-      .collection(keyVaultCollectionName)
+      .db(keyVaultDB)
+      .collection(keyVaultCollection)
       .findOne({ 'keyAltNames': keyName5 })
       .catch((err) => { console.error(err.stack) });
 
@@ -186,6 +186,7 @@ const AEAD_RANDOM = 'AEAD_AES_256_CBC_HMAC_SHA_512-Random';
     'name': 'Taylor',
     'ssn': '555-55-5555',
     'dob': new Date('1989-12-13'),
+    'comment': 'random thing said by Taylor',
     'object_data': {record:1, num: 12345678},
     'array_data':[{foo:1, bar:2}, "secret"],
     'unenc_data':[{foo:1, bar:2}, "notsecret"],
@@ -208,6 +209,7 @@ await client
     'name': 'Thomas',
     'ssn': '290-66-1234',
     'dob': new Date('1960-11-06'),
+    'comment': 'This is string to search on mongodb employee',
     'object_data': {record:1, num: 87654321},
     'array_data':[{foo:2, bar:3}, "secret2"],
     'unenc_data':[{foo:2, bar:3}, "notsecret2"],

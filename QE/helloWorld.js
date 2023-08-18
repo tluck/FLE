@@ -31,11 +31,11 @@ const extraOptions = {
   cryptSharedLibPath: credentials["SHARED_LIB_PATH"]
 };
 
-const keyVaultDB = 'encryption';
+const keyVaultDB         = 'encryption';
 const keyVaultCollection = '__keyVault';
-const dbName = 'QE';
-const collectionName = 'people';
-const regex = { "keyAltNames": { $regex: /people.QE/ }};
+const dbName             = 'QE';
+const collectionName     = 'people';
+const regex              = { "keyAltNames": { $regex: /people.QE/ }};
 
 // Generate test key with: console.log( Buffer.from(crypto.randomBytes(96)).toString('base64') )
 //  or from terminal: echo $(head -c 96 /dev/urandom | base64 | tr -d '\n')
@@ -113,6 +113,7 @@ async function main() {
        'name': 'Taylor',
        'ssn': '555-55-5555',
        'dob': new Date('1989-12-13'),
+       'comment': 'random thing said by Taylor',
        'object_data': {record:1, num: 12345678},
        'array_data':[{foo:1, bar:2}, "secret"],
        'unenc_data':[{foo:1, bar:2}, "notsecret"],
@@ -131,6 +132,7 @@ async function main() {
        'name': 'Thomas',
        'ssn': '290-66-1234',
        'dob': new Date('1960-11-06'),
+       'comment': 'This is string to search on mongodb employee',
        'object_data': {record:1, num: 87654321},
        'array_data':[{foo:2, bar:3}, "secret2"],
        'unenc_data':[{foo:2, bar:3}, "notsecret2"],

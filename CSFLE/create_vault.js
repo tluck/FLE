@@ -20,10 +20,11 @@ const { MongoClient } = mongodb;
 
 const dbName                 = 'CSFLE';
 const dataCollectionName     = 'people';
-const keyVaultdbName         = 'encryption';
-const keyVaultCollectionName = '__keyVault';
+const keyVaultDB             = 'encryption';
+const keyVaultCollection     = '__keyVault';
 // const dataNamespace          = `${dbName}.${dataCollectionName}`;
-const keyVaultNamespace      = `${keyVaultdbName}.${keyVaultCollectionName}`;
+const keyVaultNamespace      = `${keyVaultDB}.${keyVaultCollection}`;
+const regex                  = { "keyAltNames": { $regex: /people.CSFLE/ }};
 
 // Only needed if using local master key for testing, or wrapping a custom key/secrets REST service call
 // See: Quickstart Guide for generating a local key in Base64 format
@@ -63,13 +64,13 @@ const AEAD_RANDOM = 'AEAD_AES_256_CBC_HMAC_SHA_512-Random';
    //mongocryptdBypassSpawn: true,
    });
 
-  const keyVaultCollection = client.db(keyVaultdbName).collection(keyVaultCollectionName);
+//console.log("\nDropping keyVaultCollection if present...")
+//await client.db(keyVaultDB).collection(keyVaultCollection).drop().catch(() => {});
+const keyVaultClient = client.db(keyVaultDB).collection(keyVaultCollection);
+  console.log( "\nRemoving old keys from keyVault in",keyVaultNamespace,"matching",regex);
+  await keyVaultClient.deleteMany( regex );
 
-  //console.log("\nDropping keyVaultCollection if present...")
-  //await client.db(keyVaultdbName).collection(keyVaultCollectionName).drop().catch(() => {});
-
-
-  await keyVaultCollection.createIndex(
+  await keyVaultClient.createIndex(
     { keyAltNames: 1 },
     {
       unique: true,
